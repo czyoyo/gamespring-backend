@@ -7,7 +7,7 @@ const userRepository = AppDataSource.getRepository(User);
 
 // 일반 rest api 에서 사용자 인증 미들웨어
 export const authenticateJwt = async (req: any, res: any, next: any) => {
-  console.log("헤더", req.headers)
+  // console.log("헤더", req.headers)
   const JWT_SECRET = process.env.SECRET_KEY as string;
   const token = req.headers.authorization?.split(' ')[1]; // Bearer <token>
 
@@ -46,21 +46,21 @@ export const authenticateSocket = (socket: Socket, next: (err?: any) => void) =>
   const JWT_SECRET = process.env.SECRET_KEY as string;
   const token = socket.handshake.auth.token;
 
-  console.log('User authenticated tokennnnnn:', token);
+  // console.log('User authenticated tokennnnnn:', token);
 
   if (token) {
 
-    console.log("토큰 검증부 진입")
+    // console.log("토큰 검증부 진입")
 
-    console.log("준비된 시크릿 키", JWT_SECRET)
+    // console.log("준비된 시크릿 키", JWT_SECRET)
 
     jwt.verify(token, JWT_SECRET, async (err: any, decoded: any) => {
 
-      console.log("토큰 검증부 진입2")
+      // console.log("토큰 검증부 진입2")
 
       if (err) {
-        console.log("토큰 검증부 진입 에러발생")
-        console.log(err)
+        // console.log("토큰 검증부 진입 에러발생")
+        // console.log(err)
         return next(new Error('Authentication error'));
       }
 

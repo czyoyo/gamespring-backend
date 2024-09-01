@@ -9,7 +9,7 @@ import { CommonResponse } from '../utils/CommonResponse';
 const userRepository = AppDataSource.getRepository(User);
 
 export const getUser = async (req: Request, res: Response) => {
-  console.log('@@@@@@@@@@@@@@@@@:', req.decodedUser);
+  // console.log('@@@@@@@@@@@@@@@@@:', req.decodedUser);
   try {
     const user = req.decodedUser as User;
     const userResponse: UserResponseDto = {
@@ -59,18 +59,18 @@ export const login = async (req: Request, res: Response) => {
       return res.status(400).json(CommonResponse.error('Invalid credentials'));
     }
 
-    console.log(user);
+    // console.log(user);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(400).json(CommonResponse.error('Invalid credentials'));
     }
 
-    console.log(JWT_SECRET);
+    // console.log(JWT_SECRET);
 
     const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
 
-    console.log(token);
+    // console.log(token);
 
     res.json(CommonResponse.success('Login successful', { token }));
   } catch (error) {

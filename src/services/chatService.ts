@@ -26,57 +26,15 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const getUserMessages = async (req: Request, res: Response) => {
   try {
-    const {roomId} = req.body;
+
+    const roomId = req.params.roomId;
+    console.log("!!!!!!!!", roomId)
 
     const messages = await messageRepository.find({
       where: { roomId: roomId },
       relations: ['sender', 'receiver'],
       order: { createdAt: 'ASC' }
     });
-
-
-
-    // // get user from request
-    // const currentUser = req.decodedUser as User;
-    //
-    // // get target user id
-    // const targetUserId:string = req.query.userId as string;
-    // // string to number
-    // const targetUser = await userRepository.findOne({ where: { id: parseInt(targetUserId) } });
-    // if(!targetUser) {
-    //   return res.status(404).json(CommonResponse.error('User not found'));
-    // }
-    //
-    // let messages;
-    //
-    // // chat room Id 가 있는 공개방일 경우
-    // if(req.query.roomId) {
-    //   const roomId:string = req.query.roomId as string;
-    //   messages = await messageRepository.find({
-    //     where: { roomId: roomId },
-    //     relations: ['sender', 'receiver'],
-    //     order: { createdAt: 'ASC' }
-    //   });
-    // } else {
-    //   // DM 일 경우 sender 와 receiver 가 일치하는 메시지만 조회
-    //   messages = await messageRepository.find({
-    //     where: [
-    //       { sender: currentUser, receiver: targetUser },
-    //       { sender: targetUser, receiver: currentUser }
-    //     ],
-    //     relations: ['sender', 'receiver'],
-    //     order: { createdAt: 'ASC' }
-    //   });
-    // }
-
-    // const messageResponses: MessageResponseDto[] = messages.map(message => ({
-    //   id: message.id,
-    //   content: message.content,
-    //   sender: { id: message.sender.id, username: message.sender.username },
-    //   receiver: message.receiver ? { id: message.receiver.id, username: message.receiver.username } : undefined,
-    //   type: message.type,
-    //   createdAt: message.createdAt
-    // }));
 
     const messageResponses: MessageResponseDto[] = messages.map(message => ({
       id: message.id,

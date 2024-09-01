@@ -42,7 +42,7 @@ io.on('connection', (socket) => handleChat(io, socket));
 // 데이터베이스 초기화 및 서버 시작
 initializeDatabase().then(() => {
   httpServer.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    // console.log(`Server is running on port ${PORT}`);
   });
 }).catch((error) => {
   console.error("Database connection error", error);

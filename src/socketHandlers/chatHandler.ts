@@ -11,22 +11,14 @@ const messageRepository = AppDataSource.getRepository(Message);
 const roomSocketMap = new Map<string, Set<string>>();
 
 export const handleChat = (io: Server, socket: Socket) => {
-  console.log('User connectedㅇㅇㅇㅇㅇ:', socket.id);
-
-  console.log('User authenticated555555555:', socket.data.decodedUser);
 
   // 방 입장
   socket.on('enter', async (data: CreateMessageDto) => {
 
     // 유저 정보 가져오기
-    console.log('User authenticatedㅁㅁㅁㅁ:', socket.data.decodedUser);
     // 해당 방에 소켓 입장
     const {roomId} = data;
 
-    // console.log("방 입장 이벤트 발생", data)
-    console.log("방 입장 이벤트 발생", roomId)
-
-    console.log("유저 정보", socket.data.decodedUser)
 
     const message: string = `${socket.data.decodedUser.username} 님이 입장`;
 
@@ -78,7 +70,7 @@ export const handleChat = (io: Server, socket: Socket) => {
   // public 메시지 전송
   socket.on('message', async (data: CreateMessageDto) => {
 
-    console.log("메시지 전송 이벤트 발생", data)
+    // console.log("메시지 전송 이벤트 발생", data)
 
     const { content, roomId } = data;
 
@@ -113,7 +105,7 @@ export const handleChat = (io: Server, socket: Socket) => {
 
       if(roomId) {
         // 해당 방에 메시지 전송
-        console.log("해당 방에 메시지 전송", roomId, messageResponse)
+        // console.log("해당 방에 메시지 전송", roomId, messageResponse)
         io.to(roomId).emit('message', messageResponse);
       }/* else {
         // 모든 방에 메시지 전송 (public)
@@ -130,16 +122,22 @@ export const handleChat = (io: Server, socket: Socket) => {
     const { content, receiverId } = data;
 
     console.log("privateMessage 이벤트 발생", data)
+    if(!receiverId) {
+      console.error('Receiver not found');
+      return;
+    }
+    // receiverId 는 string 이므로 number 로 변환
+    const receiverIdNumber = parseInt(receiverId);
 
     try {
       // 메시지 보낸 사람, 받는 사람 정보 조회
       const sender:User = socket.data.decodedUser;
-      console.log("sender", sender)
-      const receiver = await userRepository.findOne({ where: { username: receiverId } });
+      // console.log("sender", sender)
+      const receiver = await userRepository.findOne({ where: { id: receiverIdNumber } });
       if(!receiver) {
         throw new Error('Receiver not found');
       }
-      console.log("receiver", receiver)
+      // console.log("receiver", receiver)
 
       const dmRoomId = [sender.id, receiver.id].sort().join('_');
       // 해당 방에 소켓 입장
