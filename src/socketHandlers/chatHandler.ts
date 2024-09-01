@@ -11,7 +11,7 @@ const messageRepository = AppDataSource.getRepository(Message);
 const roomSocketMap = new Map<string, Set<string>>();
 
 export const handleChat = (io: Server, socket: Socket) => {
-  console.log('User connectedㅋㅋㅋㅋㅋ:', socket.id);
+  console.log('User connectedㅇㅇㅇㅇㅇ:', socket.id);
 
   console.log('User authenticated555555555:', socket.data.decodedUser);
 
